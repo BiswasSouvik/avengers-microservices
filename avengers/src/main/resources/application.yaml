@@ -1,0 +1,54 @@
+eureka:
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+server:
+  port: 9000
+#  servlet:
+#    session:
+#      cookie:
+#        name: ASESSION
+
+spring:
+  application:
+    name: avenger-service
+  datasource:
+    password: ENC(7vjAjFDV6R2wZ/XBOkWBEDOcsgEVu6IxSOA7Bv12BDE=)
+    testWhileIdle: true
+    url: jdbc:mysql://localhost:3306/marvel?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8
+    username: support
+    validationQuery: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+
+security:
+  basic:
+    enabled: false
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:8662/uaa/oauth/check_token
+    client:
+      client-id: avengers
+      client-secret: pin
+
+#security:
+#  oauth2:
+#    resource:
+#      token-info-uri: http://localhost:8662/authorization-api/oauth/check_token
+#    client:
+#      client-id: avengers
+#      client-secret: pin
+#      user-authorization-uri: http://localhost:8662/authorization-api/oauth/authorize
+#      access-token-uri: http://localhost:8662/authorization-api/oauth/token

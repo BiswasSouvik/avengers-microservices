@@ -1,0 +1,90 @@
+server:
+  port: 8662
+  servlet:
+    session:
+      cookie:
+        name: KSESSION
+
+spring:
+  aop:
+    proxy-target-class: true
+  application:
+    name: gateway-service
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+zuul:
+#  host:
+#    connect-timeout-millis : 5000000
+#    socket-timeout-millis : 5000000
+#  ignored-service: '*'
+  routes:
+    hero-service:
+      sensitiveHeaders:
+      path: /heros-api/**
+      serviceId : hero-service
+    avenger-service:
+#    /avengers-api/**
+#      sensitiveHeaders:
+      path: /avengers-api/**
+#      serviceId: avenger-service
+    information-service:
+      sensitiveHeaders:
+      path: /informations-api/**
+      serviceId: informations-service
+    authorization-server:
+      sensitiveHeaders:
+#      path: /authorization-api/**
+      path: /uaa/**
+#      serviceId: authorization-server
+      stripPrefix: false
+  add-proxy-headers: true
+
+#proxy:
+#  auth:
+#    routes:
+#      hero-service: oauth2
+#      avenger-service: oauth2
+#      information-service: oauth2
+
+#security:
+#  oauth2:
+#    sso:
+#      loginPath: /login
+#    client:
+#      accessTokenUri: http://uaa-service/uaa/oauth/token
+#      userAuthorizationUri: /uaa/oauth/authorize
+#      clientId: acme
+#      clientSecret: acmesecret
+#    resource:
+#      jwt:
+#        keyValue: "abc"
+#      id: openid
+#      serviceId: ${PREFIX:}resource
+
+security:
+  basic:
+    enabled: false
+  oauth2:
+    sso:
+      loginPath: /login
+    client:
+      client-id: balancer
+      client-secret: pin
+      #      user-authorization-uri: /authorization-api/oauth/authorize
+      #      access-token-uri: http://authorization-server/authorization-api/oauth/token
+      user-authorization-uri: /uaa/oauth/authorize
+      access-token-uri: http://authorization-server/uaa/oauth/token
+    resource:
+#      token-info-uri: http://authorization-server/authorization-api/oauth/check_token
+      token-info-uri: http://authorization-server/uaa/oauth/check_token
+#      preferTokenInfo: false
+  sessions: ALWAYS
+
